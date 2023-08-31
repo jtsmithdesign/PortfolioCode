@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <title>Iso Carousel</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/jquery.min.js"></script>
+</head>
+
+
+<body>
+
+    <section id="portfolioThumbnailColumn">
+        <div class="portfolio-grid-sm grid pre-init">
+            <div class="single-portfolio">
+                <div>
+                    <div class="portfolio-thumbnail-img">
+                        <img src="images/CutwaterFade.png">
+                    </div>
+                    <div class="portfolio-thumbnail-content">
+                        <div>
+                            <div class="project-info">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/iso.js">
+    </script>
+
+    <script>
+        let portfolioCount = -1;
+        let thumbnailLoopPlay = true;
+
+        let trigger = jQuery('#portfolioThumbnailColumn');
+        let myScrollFunc = function () {
+            let windowScroll = window.scrollY;
+            //console.log(windowScroll + window.innerHeight + ' ' + trigger.offset().top + 200)
+
+            if (windowScroll + window.innerHeight > trigger.offset().top + 200) {
+                thumbnailLoop(6);
+                window.removeEventListener("scroll", myScrollFunc);
+            }
+        };
+
+        window.addEventListener("scroll", myScrollFunc);
+        myScrollFunc();
+
+        let singlePortfolio = jQuery('.single-portfolio');
+
+        for (let i = 0; i < 20; i++) {
+            jQuery('.portfolio-grid-sm').append(singlePortfolio.clone());
+        }
+
+        jQuery('.single-portfolio').each(function () {
+            portfolioCount++;
+            let backgroundColor = '' + Math.floor(Math.random() * 16777215).toString(16);
+
+            jQuery(this).css('background-color', '#' + backgroundColor)
+            jQuery(this).find('.project-info').html('<h1>Info ' + portfolioCount + '</h1>');
+
+            jQuery(this).addClass('count-' + portfolioCount);
+            jQuery(this).attr('data-sort', portfolioCount);
+            console.log(backgroundColor);
+        });
+
+        var iso = jQuery('.grid').isotope({
+            // options
+            itemSelector: '.single-portfolio',
+            layoutMode: 'fitRows',
+            stagger: 100,
+            transitionDuration: '1s', hiddenStyle: {
+                opacity: 0,
+                transform: 'scale(0.001)'
+            },
+            visibleStyle: {
+                opacity: 1,
+                transform: 'scale(1)'
+            },
+            getSortData: {
+                sortOrder: '[data-sort]'
+            },
+            sortBy: ['sortOrder'],
+            filter: '.count-0, .count-1, .count-2, .count-3, .count-4, .count-5'
+        });
+        jQuery('.grid').removeClass('pre-init');
+
+        function thumbnailLoop(startingNumber) {
+            //console.log(portfolioCount);
+            setTimeout(function () {
+                if (thumbnailLoopPlay) {
+                    if (startingNumber > portfolioCount) {
+                        startingNumber = 0;
+                    }
+                    let filterValue = '.count-' + (startingNumber);
+                    for (let i = 1; i < 6; i++) {
+                        if (startingNumber + i > portfolioCount) {
+                            startingNumber = i * -1;
+                        }
+                        filterValue = filterValue + ', .count-' + (startingNumber + i);
+                        jQuery('.grid .count-' + (startingNumber + i)).attr('data-sort', i - 1);
+                    }
+                    iso.isotope('updateSortData').isotope({ filter: filterValue });
+                    //console.log(filterValue);
+                    thumbnailLoop(startingNumber + 6);
+                } else {
+                    thumbnailLoop(startingNumber);
+                }
+            }, 10000);
+        }
+
+        jQuery(".grid").hover(function (e) {
+            e.type === 'mouseenter' ? thumbnailLoopPlay = false : thumbnailLoopPlay = true;
+            console.log('hovering ' + e.type + ' ' + thumbnailLoopPlay);
+        });
+    </script>
+
+
+</body>
+
+</html>

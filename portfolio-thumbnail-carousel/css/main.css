@@ -1,0 +1,72 @@
+* {box-sizing: border-box;}
+body {display: flex; padding: 0 5%; box-sizing: border-box; margin: 0; max-height: 100vh; overflow: hidden; align-items: center; height: 100vh;}
+section {width: 100%; flex: 1 1 auto;}
+.portfolio-grid-sm {display: flex; margin: -12px; flex-wrap: wrap;}
+.portfolio-grid-sm .single-portfolio {width: calc(33.3333% - 24px); padding: 12px;}
+.single-portfolio > div {display: flex; overflow: hidden; padding-top: 75%; position: relative;}
+.single-portfolio .portfolio-thumbnail-img {display: flex; align-items: center; justify-content: center; position: absolute; top: 0; right: 0; bottom: 0; left: 0;min-height: 100%; min-width: 100%;}
+.single-portfolio .portfolio-thumbnail-img img {display: block; min-width: 100%; min-height: 100%;}
+
+.single-portfolio .portfolio-thumbnail-content {
+    transition: bottom .5s ease;
+    position: absolute;
+    bottom: -100%; 
+    padding-top: 75%;
+    width: 100%;
+    background-color: #ff00ff;
+}
+.single-portfolio .portfolio-thumbnail-content > div {
+    position: absolute;
+    bottom: 30px;
+    top: 30px;
+    right: 30px;
+    left: 30px;
+    overflow: hidden;
+}
+.single-portfolio .project-info {max-height: 70px; overflow: hidden;}
+.single-portfolio h3 {
+    color: var( --e-global-color-secondary );
+    font-size: 18px;
+    line-height: 22px;
+}
+.single-portfolio h4 {
+    color: var( --e-global-color-secondary );
+    line-height: 20px;
+}
+.single-portfolio ul {
+    padding-inline-start: 0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 100%;
+    height: 50%;
+    position: absolute;
+    bottom: 0;
+    padding-top: 10px;
+    margin-bottom: -6px;
+}
+.single-portfolio li {
+    color: var( --e-global-color-secondary );
+    flex: 0 0 0;
+    margin-left: 16px;
+    margin-bottom: 6px;
+    line-height: 20px;
+    width: calc(100% - 16px);
+}
+.single-portfolio > div:hover .portfolio-thumbnail-content {
+    bottom: 0;
+}
+
+.pre-init .single-portfolio:nth-child(n+7) {
+    display: none;
+}
+
+@media(min-width: 1548px){
+    .single-portfolio li {
+        margin-left: 20px;
+        width: calc(100% - 20px);
+    }
+}
+@media(max-width: 731px){
+    .portfolio-thumbnail-content {display: none;}
+}
